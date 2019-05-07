@@ -4,18 +4,38 @@ public class Quote {
     String pickupPostcode;
     String deliveryPostcode;
     Long price;
+    String vehicle;
 
-    public Quote() {}
+    
+    public Quote() {
+        System.out.println("empty quote");
+    }
 
     public Quote(String pickupPostcode, String deliveryPostcode) {
         this.pickupPostcode = pickupPostcode;
         this.deliveryPostcode = deliveryPostcode;
+        System.out.println("no vehicle");
     }
 
     public Quote(String pickupPostcode, String deliveryPostcode, Long price) {
         this.pickupPostcode = pickupPostcode;
         this.deliveryPostcode = deliveryPostcode;
         this.price = price;
+    }
+
+    public Quote(String pickupPostcode, String deliveryPostcode, String vehicle) {
+        this.pickupPostcode = pickupPostcode;
+        this.deliveryPostcode = deliveryPostcode;
+        this.vehicle = vehicle;
+        System.out.println("quote made");
+    }
+
+    public Quote(String pickupPostcode, String deliveryPostcode, String vehicle, Long price) {
+        this.pickupPostcode = pickupPostcode;
+        this.deliveryPostcode = deliveryPostcode;
+        this.vehicle = vehicle;
+        this.price = price;
+        System.out.println("quote returned");
     }
 
     public String getPickupPostcode() {
@@ -40,5 +60,13 @@ public class Quote {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
     }
 }

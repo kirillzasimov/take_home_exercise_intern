@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Quote form</title>
+  </head>
+  <body>
+      <div class="container">
+        <div class="col- centered" style="padding-bottom : 40px; padding-top : 40px">
+          <h1>Please complete the following form to get a quote</h1>
+          <form id="form" action=# method="POST">
+            <div class="form-group">
+              <label for="pickupPostcode">Pickup Postcode</label>
+              <input type="text" class="form-control" id="pickupPostcode" name="pickupPostcode">
+            </div>
+            <div class="form-group">
+              <label for="deliveryPostcode">Delivery Postcode</label>
+              <input type="text" class="form-control" id="deliveryPostcode" name="deliveryPostcode">
+            </div>
+            <div class="form-group">
+              <label for="vehicle">Select Vehicle</label>
+              <select class="form-control" id="vehicle" name="vehicle">
+                <option value="bicycle">Bicycle</option>
+                <option value="motorbike">Motorbike</option>
+                <option value="parcel_car">Parcel car</option>
+                <option value="small_van">Small van</option>
+                <option value="large_van">Large van</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-block">Submit</button>
+          </form>
+          <h3 id="output"></h3>
+        </div>
+      </div>
+  </body>
+  <script>
+    (function(){
+      function toJSONString(form){
+        let obj = {};
+        const elements = form.querySelectorAll("input, select, textarea");
+        for (let i = 0; i < elements.length; ++i){
+          const element = elements[i];
+          const name = element.name;
+          const value = element.value;
+          if(name){
+            obj[name] = value;
+          }
+        }
+        return obj;
+      }
+      document.addEventListener('DOMContentLoaded', async function () {
+        const form = document.getElementById('form');
+        const output = document.getElementById('output');
+        form.addEventListener('submit', async function (e){
+          e.preventDefault();
+          const json = toJSONString(this);
+          const xhr = new XMLHttpRequest();
+          const url = 'http://localhost:8080/quote';
+          xhr.open('POST', url, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(JSON.stringify(json));
+          xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4 && xhr.status == 200){
+              let response = JSON.parse(xhr.responseText);
+              output.innerHTML = 'A delivery from ' + response.pickupPostcode + ' to ' + response.deliveryPostcode + ' using a ' + response.vehicle.replace(/_/g, ' ') + ' will cost you £' + response.price + '.';
+            } else {
+              output.innerHTML = 'Waiting for server response';
+            }
+          }
+        }, false);
+      });
+    })();
+  </script>
+</html>
